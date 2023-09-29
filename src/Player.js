@@ -7,6 +7,7 @@ class Player {
         this.y = 100;
         this.speedY = 0;
         this.maxSpeed = 10;
+        this.projectiles = [];
     }
 
     update() {
@@ -18,9 +19,21 @@ class Player {
         if (this.y > this.game.height - this.height * 0.5) this.y = this.game.
             height - this.height * 0.5;
         else if (this.y < -this.height * 0.5) this.y = -this.height * 0.5;
+        // handle projectiles
+        this.projectiles.forEach(pr => { pr.update(); });
+        this.projectiles = this.projectiles.filter(pr => !pr.markedForDeletion);
     }
 
     draw(context) {
+        context.fillStyle = 'black';
         context.fillRect(this.x, this.y, this.width, this.height);
+        this.projectiles.forEach(pr => { pr.draw(context); });
+    }
+
+    shootTop() {
+        if (this.game.ammo > 0) {
+            this.projectiles.push(new Projectile(this.game, this.x + 80, this.y + 30));
+            this.game.ammo--;
+        }
     }
 }
