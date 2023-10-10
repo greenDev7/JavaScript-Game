@@ -25,7 +25,17 @@ class Game {
             this.ammoTimer += deltaTime;
         }
 
-        this.enemies.forEach(enemy => enemy.update());
+        this.enemies.forEach(enemy => {
+            enemy.update();
+            if (this.checkCollision(this.player, enemy)) {
+                enemy.markedForDeletion = true;
+            }
+            this.player.projectiles.forEach(projectile => {
+                if (this.checkCollision(projectile, enemy)) {
+                    projectile.markedForDeletion = true;
+                }
+            })
+        });
 
         this.enemies = this.enemies.filter(enemy => !enemy.markedForDeletion);
 
@@ -47,5 +57,13 @@ class Game {
         const randomize = Math.random();
         if (randomize < 0.5) this.enemies.push(new Angler1(this))
         else this.enemies.push(new Angler2(this));
+    }
+
+    checkCollision(rect1, rect2) {
+        return (
+            rect1.x < rect2.x + rect2.width &&
+            rect2.x < rect1.x + rect1.width &&
+            rect1.y < rect2.y + rect2.height &&
+            rect2.y < rect1.y + rect1.height)
     }
 }
