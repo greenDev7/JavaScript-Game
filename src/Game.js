@@ -14,6 +14,8 @@ class Game {
         this.ammoTimer = 0;
         this.ammoInterval = 500;
         this.gameOver = false;
+        this.score = 0;
+        this.winningScore = 30;
     }
 
     update(deltaTime) {
@@ -31,8 +33,16 @@ class Game {
                 enemy.markedForDeletion = true;
             }
             this.player.projectiles.forEach(projectile => {
+                // Если пуля попала в врага
                 if (this.checkCollision(projectile, enemy)) {
-                    projectile.markedForDeletion = true;
+                    enemy.lives--; // уменьшаем жизни врага на единицу
+                    projectile.markedForDeletion = true; // удаляем пулю
+                    // Проверяем, если у врага не осталось жизней
+                    if (enemy.lives <= 0) {
+                        enemy.markedForDeletion = true; // удаляем врага        
+                        this.score += enemy.score; // увеличиваем количество очков главного игрока       
+                        if (this.isWin()) this.gameOver = true;  // проверяем условие победы
+                    }
                 }
             })
         });
@@ -65,5 +75,9 @@ class Game {
             rect2.x < rect1.x + rect1.width &&
             rect1.y < rect2.y + rect2.height &&
             rect2.y < rect1.y + rect1.height)
+    }
+
+    isWin() {
+        return this.score >= this.winningScore;
     }
 }
