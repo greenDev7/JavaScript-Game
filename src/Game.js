@@ -2,6 +2,7 @@ class Game {
     constructor(width, height) {
         this.width = width;
         this.height = height;
+        this.background = new Background(this);
         this.player = new Player(this);
         this.input = new InputHandler(this);
         this.ui = new UI(this);
@@ -18,11 +19,13 @@ class Game {
         this.winningScore = 30;
         this.gameTime = 0;
         this.timeLimit = 20 * 1000;
+        this.speed = 1;
     }
 
     update(deltaTime) {
         if (!this.gameOver) this.gameTime += deltaTime;
         if (this.gameTime > this.timeLimit) this.gameOver = true;
+        this.background.update();
         this.player.update();
         if (this.ammoTimer > this.ammoInterval) {
             if (this.ammo < this.maxAmmo) this.ammo++;
@@ -62,7 +65,8 @@ class Game {
     }
 
     draw(context) {
-        this.player.draw(context);
+        this.background.draw(context); // Сначала рисуем фон
+        this.player.draw(context); // а потом все остальные объекты игры: игрока, UI, враги и т.п.
         this.ui.draw(context);
         this.enemies.forEach(enemy => enemy.draw(context));
     }
