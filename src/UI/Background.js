@@ -9,7 +9,7 @@ class Background {
         this.layer2 = new Layer(this.game, this.image2, 0.4);
         this.layer3 = new Layer(this.game, this.image3, 1);
         this.layer4 = new Layer(this.game, this.image4, 1.5);
-        this.layers = [this.layer1, this.layer2, this.layer3, this.layer4];
+        this.layers = [this.layer1, this.layer2, this.layer3];
     }
     update() {
         this.layers.forEach(layer => layer.update());
