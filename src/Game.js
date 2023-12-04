@@ -26,7 +26,6 @@ class Game {
         if (!this.gameOver) this.gameTime += deltaTime;
         if (this.gameTime > this.timeLimit) this.gameOver = true;
         this.background.update();
-        this.background.layer4.update();
         this.player.update();
         if (this.ammoTimer > this.ammoInterval) {
             if (this.ammo < this.maxAmmo) this.ammo++;
@@ -66,11 +65,10 @@ class Game {
     }
 
     draw(context) {
-        this.background.draw(context); // Сначала рисуем фон (первые три слоя)
+        this.background.draw(context); // Сначала рисуем фон
         this.player.draw(context); // а потом все остальные объекты игры: игрока, UI, враги и т.п.
         this.ui.draw(context);
         this.enemies.forEach(enemy => enemy.draw(context));
-        this.background.layer4.draw(context); // Рисуем 4-ый слой, чтобы он был спереди всех объектов
     }
 
     addEnemy() {
